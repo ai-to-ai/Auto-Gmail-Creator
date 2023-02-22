@@ -1,5 +1,4 @@
-# Auto-Google-Signup
-With sms-activate.org
+# Auto-Gmail-Creator
 
 Auto Gmail Creation Script
 
