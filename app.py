@@ -20,7 +20,7 @@ WAIT = 4
 REQUEST_MAX_TRY = 10
 combined_first_names = "All"
 last_name = "Soft1210"
-birthday = "10/12/1995"
+birthday = "12/30/1990"
 
 def getProxy():
     proxy_list = [
@@ -53,14 +53,17 @@ def setDriver():
                "download.extensions_to_open": "",
                "download.prompt_for_download": False,
                "plugins.always_open_pdf_externally": True}
-    proxy = getProxy()
+
+    # You can use proxy if you want.
+    
+    # proxy = getProxy()
 
     options = {
-        'proxy': {
-            'http': proxy,
-            'https': proxy,
-            'no_proxy': 'localhost,127.0.0.1' # excludes
-        },
+        # 'proxy': {
+        #     'http': proxy,
+        #     'https': proxy,
+        #     'no_proxy': 'localhost,127.0.0.1' # excludes
+        # },
         'ca_cert': './ca.crt',
         'exclude_hosts': ['google-analytics.com'],
         'verify_ssl': True
@@ -84,7 +87,8 @@ def setDriver():
     # chrome_options.add_argument(r"--user-data-dir=C:\\Users\\nICE\\AppData\\Local\\Google\\Chrome\\User Data") #e.g. C:\Users\nICE\AppData\Local\Google\Chrome\User Data
     chrome_options.add_argument(r'--profile-directory=Profile 11')
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = chrome_options, seleniumwire_options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = chrome_options)
+    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = chrome_options, seleniumwire_options=options)
 
     return driver
 
