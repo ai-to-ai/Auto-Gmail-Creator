@@ -18,5 +18,6 @@ If you need, you can modify.
 2. Run script 
     "python app.py" or "python3 app.py"
     ![image](./gmail-create.jpg)
+You can visit [sms-activate.org](https://sms-activate.org) to see it's apis.
     ![sms-activate](./sms.jpg)
     
