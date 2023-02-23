@@ -17,6 +17,6 @@ If you need, you can modify.
     - webdriver_manager==3.8.5
 2. Run script 
     "python app.py" or "python3 app.py"
-    ![image](gmail-create.png)
+    ![image](./gmail-create.png)
     
     
