@@ -16,6 +16,11 @@ If you need, you can modify.
     - selenium_wire==5.1.0
     - webdriver_manager==3.8.5
 2. Run script 
+    - you will edit the 'user.csv' file with given type such as First name, Last name, password, Birthday
+    - bot will generate username concating FN and LN and random 4 digits.
+    - once the account is created, there will be 'created_accounts.txt'
+    - you can edit the script as you want.
+    
     "python app.py" or "python3 app.py"
     ![image](./gmail-create.jpg)
 
