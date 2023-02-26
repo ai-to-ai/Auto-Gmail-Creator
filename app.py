@@ -133,7 +133,8 @@ def main():
       for row in csvreader:
         try:
             print(row)
-
+            if "Firstname" == row[0]:
+                continue
             combined_first_names = row[0]
             last_name = row[1]
             mypw = row[2]
@@ -174,8 +175,9 @@ def main():
             # set username
             print('################# Set User Name ####################')
             rand_4_digit_num = random.randint(1000,9999)
+            print(rand_4_digit_num)
             user_concat = combined_first_names +"."+ last_name
-            user_concat = user_concat.lower() + rand_4_digit_num
+            user_concat = user_concat.lower() + str(rand_4_digit_num)
             WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['username']))).send_keys(user_concat)
 
             # set password

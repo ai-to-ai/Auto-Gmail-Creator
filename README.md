@@ -16,15 +16,21 @@ If you need, you can modify.
     - selenium_wire==5.1.0
     - webdriver_manager==3.8.5
 2. Run script 
-    - you will edit the 'user.csv' file with given type such as First name, Last name, password, Birthday
-    - bot will generate username concating FN and LN and random 4 digits.
-    - once the account is created, there will be 'created_accounts.txt'
+    - You need to  edit the 'user.csv' file with given type such as First name, Last name, password, Birthday ( from the second line )
+    - Bot will generate username concating FN and LN and random 4 digits.
     - you can edit the script as you want.
     
     "python app.py" or "python3 app.py"
+
+3. Once the account is created, there will be 'created_accounts.txt'
+
+- Editing the user.csv
+    ![image](./user.jpg)
+
+- Bot will create chrome browser repeatedly for each gmail.
     ![image](./gmail-create.jpg)
 
-You can visit [sms-activate.org](https://sms-activate.org) to see it's apis.
+- You can visit [sms-activate.org](https://sms-activate.org) to see it's apis.
     ![sms-activate](./sms.jpg)
     
 
