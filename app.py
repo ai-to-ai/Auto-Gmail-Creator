@@ -93,16 +93,16 @@ def getProxy():
 def setDriver():
     
     # proxy = getProxy()
-    proxy = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324"
+    # proxy = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324"
     options = {
-        'proxy': {
-            'http': proxy,
-            'https': proxy,
-            'no_proxy': 'localhost,127.0.0.1' # excludes
-        },
-        'ca_cert': './ca.crt',
+        # 'proxy': {
+        #     'http': proxy,
+        #     'https': proxy,
+        #     'no_proxy': 'localhost,127.0.0.1' # excludes
+        # },
+        # 'ca_cert': './ca.crt',
         'exclude_hosts': ['google-analytics.com'],
-        'verify_ssl': True
+        # 'verify_ssl': True
     }
     profile_path = ""
     chrome_options = Options()
