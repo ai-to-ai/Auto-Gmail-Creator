@@ -2,13 +2,9 @@
 
 Auto Gmail Creation Script
 
-This script uses [sms-activate.org](https://sms-activate.org) api for phone verification.
+This script uses [sms-activate.org](https://sms-activate.org) api for phone verification but please note that they charge tiny money.
 
-You don't need to download Chromedriver manually. The script does it automatically with webdriver manager.
-
-This script uses Seleniumwire for proxy rotation.
-
-If you need, you can modify.
+You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
 
 1. Install Dependencies with "pip install -r requirements.txt"
     - Python 3.x
@@ -32,6 +28,10 @@ If you need, you can modify.
 
 - You can visit [sms-activate.org](https://sms-activate.org) to see it's apis.
     ![sms-activate](./sms.jpg)
+
+    ![image](./country_code.jpg)
+
+    ![image](./country_table.jpg)
     
 
 ## Github
@@ -53,4 +53,8 @@ https://t.me/softengineer1210
 ## Phone
 
 +1 229 299 5932
+
+If you like it, Please donate here. Thanks. :)
+
+Ether: 0x9e701A56AA42cD89D4bD386c229Ed1A8e83E6257
 

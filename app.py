@@ -28,13 +28,14 @@ last_name = "Soft1210" # Last Name
 birthday = "12/30/1990" # Birthday
 
 # Your SMS-Activate API key
-sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
-api_key = "" 
+api_key = ""
+country_code = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
 
+sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
 phone_request_params = {
     "api_key":api_key,
     "action":"getNumber",
-    "country":"175", # Country code, see country table in sms-activate.
+    "country":country_code, 
     "service":"go",
 }
 
