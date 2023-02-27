@@ -230,7 +230,7 @@ def setDriver():
     options.add_argument(f"user-agent={user_agent}")
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
-    #driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, desired_capabilities=capabilities)
+    #driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
     
     return driver
 

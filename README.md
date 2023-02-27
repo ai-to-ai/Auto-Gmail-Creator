@@ -29,9 +29,10 @@ Thanks.
         #options = ChromeOptions()
         options = FirefoxOptions()
 
-        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, desired_capabilities=capabilities)
+        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
 
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, desired_capabilities=capabilities)
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+    
         ```
     - Manual Entry for Gmail
         You edit the 'user.csv' with given type such as First name, Last name, Password, Birthday, Username(optional) from the second line.
