@@ -31,7 +31,7 @@ REQUEST_MAX_TRY = 10
 API_KEY = "9b6b9eb50d0A3020c2710A17d9b7495b"
 COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
 
-SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+SOCKS_PROXY = "socks5://184.178.172.11:4145" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
 # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
 HTTP_PROXY = "http://user:pass@ip:port"
 HTTPS_PROXY = "https://user:pass@ip:port"
