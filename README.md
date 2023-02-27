@@ -20,7 +20,6 @@ Thanks.
 2. Install Dependencies with ```pip install -r requirements.txt```
     - requests==2.27.1
     - selenium==4.8.2
-    - selenium_wire==5.1.0
     - webdriver_manager==3.8.5
 3. Run script 
     - Browser Choice
