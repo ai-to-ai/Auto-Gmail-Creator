@@ -10,9 +10,7 @@ This script uses [sms-activate.org](https://sms-activate.org) api for phone veri
 
 You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
 
-If you want to learn about Seleniumwire, Please refer [this](https://github.com/wkeeling/selenium-wire)
-
-This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Seleniumwire & Scraping.
+This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Scraping.
 
 I am trying to find best free sms activation service. If you have any idea, Please let me know.
 
@@ -28,14 +26,12 @@ Thanks.
     - Browser Choice
         You can use Chrome, Firefox by commenting 2 lines.
         ```
-        from webdriver_manager.firefox import GeckoDriverManager
-
         #options = ChromeOptions()
         options = FirefoxOptions()
 
-        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, desired_capabilities=capabilities)
 
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, desired_capabilities=capabilities)
         ```
     - Manual Entry for Gmail
         You edit the 'user.csv' with given type such as First name, Last name, Password, Birthday, Username(optional) from the second line.
@@ -47,27 +43,12 @@ Thanks.
         AUTO_GENERATE_UERINFO = True
         ```
     - Proxy
-        You can add your own proxy by removing several comments from the script.
-        ```
-        seleniumwire_options['proxy'] = proxy_options 
-        ```
         If you want to use socks proxy, please remove comment theses lines.
         [Free Proxy list](http://free-proxy.cz/en/proxylist/country/all/socks5/ping/all/2) is here
         ```
         SOCKS_PROXY = "socks5://user:pass@ip:port"
-
-        proxy_options['http'] = SOCKS_PROXY
-        proxy_options['https'] = SOCKS_PROXY
-
-        ```
-
-        or if you want only http or https proxy, please remove comment these lines. You can remote all if you want to use both.
-        ```
         HTTP_PROXY = "http://user:pass@ip:port"
         HTTPS_PROXY = "https://user:pass@ip:port"
-
-        proxy_options['http'] = HTTP_PROXY
-        proxy_options['https'] = HTTPS_PROXY
         ```
 
     - Headless or With UI (Optional)
@@ -83,22 +64,10 @@ Thanks.
         options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
         options.add_argument(r'--profile-directory=ProfileName')
         ```
-
-    - Secure Browser (Optional)
-        You can import this cert file into your chrome browser to make secure connection (https).
-        Here's how to import cert file in your [Chrome Browser](https://www.wipo.int/pct-eservices/en/support/cert_import_backup_chrome.html).
-        ```
-        python -m seleniumwire extractcert
-        ```
-        Plus, you need to remove comment this line.
-
-        ```
-        seleniumwire_options['verify_ssl'] = True
-        ```
     - Run script 
         ```python app.py``` or ```python3 app.py```
 
-3. If an account is created successfully, it will be added to 'created_accounts.txt'.
+3. If an account is created successfully, it will be added to 'Created.txt'.
 
 ## Images
 - Running

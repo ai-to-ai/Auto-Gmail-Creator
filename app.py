@@ -1,6 +1,4 @@
-# from selenium import webdriver
-from seleniumwire import webdriver
-import seleniumwire.undetected_chromedriver as uc
+from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -8,6 +6,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium.common.exceptions import *
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
@@ -19,7 +18,7 @@ import csv
 import string
 
 # Option for Auto User info generation
-AUTO_GENERATE_UERINFO = True
+AUTO_GENERATE_UERINFO = False
 AUTO_GENERATE_NUMBER = 10
 
 # Time to wait for SELECTORS.(second)
@@ -32,7 +31,10 @@ REQUEST_MAX_TRY = 10
 API_KEY = "9b6b9eb50d0A3020c2710A17d9b7495b"
 COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
 
-
+SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+# SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+HTTP_PROXY = "http://user:pass@ip:port"
+HTTPS_PROXY = "https://user:pass@ip:port"
 
 sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
 phone_request_params = {
@@ -79,25 +81,6 @@ def generatePassword():
     chars = string.ascii_uppercase + string.ascii_lowercase + string.digits + string.punctuation
     size = random.randint(8, 12)
     return ''.join(random.choice(chars) for x in range(size))
-
-# You can modify this method with your own proxy.
-def getProxy():
-    PROXIES = [
-        "http://kIOLw:B52RK@60.242.64.183:2002",
-        "http://kIOLw:B52RK@60.242.64.183:2003",
-        "http://kIOLw:B52RK@60.242.64.183:2004",
-        ]
-
-    proxy = random.choice(PROXIES)
-
-    if "2002" in proxy:
-        url = "http://60.242.64.183/api/change_ip?index=2&rtoken=R2NbWa4IZxhnhJBUnk2FVUPbArIvJZ1QSbYNe8p1gJrmPhCbu4"
-    if "2003" in proxy:
-        url = "http://60.242.64.183/api/change_ip?index=3&rtoken=R2NbWa4IZxhnhJBUnk2FVUPbArIvJZ1QSbYNe8p1gJrmPhCbu4"
-    if "2004" in proxy:
-        url = "http://60.242.64.183/api/change_ip?index=4&rtoken=R2NbWa4IZxhnhJBUnk2FVUPbArIvJZ1QSbYNe8p1gJrmPhCbu4"
-
-    return proxy
 
 def getRandomeUserAgent():
     UAGENTS = [
@@ -178,34 +161,15 @@ def getRandomeUserAgent():
 
 # This method is for chrome driver initialization. You can customize if you want.
 def setDriver():
-    seleniumwire_options = {}
-    seleniumwire_options['exclude_hosts'] = ['google-analytics.com']
+    proxy = Proxy()
+    proxy.proxy_type = ProxyType.MANUAL
+    proxy.socks_proxy = SOCKS_PROXY
+    proxy.socks_version = 5
+    proxy.http_proxy = HTTP_PROXY
+    proxy.ssl_proxy = HTTPS_PROXY
 
-    # Secure Connection
-    # seleniumwire_options['verify_ssl'] = True
-
-    # Set Proxy
-    # proxy = getProxy() # Rotating proxy
-    SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-    # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-    HTTP_PROXY = "http://user:pass@ip:port"
-    HTTPS_PROXY = "https://user:pass@ip:port"
-
-    # Socks5 proxy
-    proxy_options = {}
-    proxy_options['no_proxy']= 'localhost,127.0.0.1'
-
-    # Http proxy
-    # proxy_options['http'] = HTTP_PROXY
-
-    # Https proxy
-    # proxy_options['https'] = HTTPS_PROXY
-
-    # Socks proxy
-    proxy_options['http'] = SOCKS_PROXY
-    proxy_options['https'] = SOCKS_PROXY
-
-    seleniumwire_options['proxy'] = proxy_options
+    capabilities = webdriver.DesiredCapabilities.CHROME
+    proxy.add_to_capabilities(capabilities)
 
     # Set User Agent
     user_agent = getRandomeUserAgent() # Random user agent
@@ -233,9 +197,9 @@ def setDriver():
     # options.add_argument(r'--profile-directory=ProfileName')
     options.add_argument(f"user-agent={user_agent}")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
-    # driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
-
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, desired_capabilities=capabilities)
+    #driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, desired_capabilities=capabilities)
+    
     return driver
 
 def main():
@@ -419,7 +383,7 @@ def main():
                         break
                     if "NO_BALANCE" in data:
                         print("Check your Balance in sms-activate.")
-                        quit()
+                        exit()
                     count = count+1
                     time.sleep(WAIT)
                 if number == '':
