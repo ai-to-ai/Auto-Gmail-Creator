@@ -30,7 +30,7 @@ WAIT = 4
 REQUEST_MAX_TRY = 10
 
 # Your SMS-Activate API key
-API_KEY = "9b6b9eb50d0A3020c2710A17d9b7495b"
+API_KEY = "" #9b6b9eb50d0A30---------d9b7495b
 COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
 # proxy = FreeProxy(country_id=['US']).get()
 # SOCKS_PROXY = "188.166.56.246:80" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
