@@ -1,48 +1,99 @@
 # Auto-Gmail-Creator
 
 ## Description
-Auto Google account creation
+Latest Open Source Bulk Auto Google Gccount Regiteration script 2023
+
+According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number.
+To avoid this limitation, I recommend to use SMS activation services.
 
 This script uses [sms-activate.org](https://sms-activate.org) api for phone verification but please note that they charge tiny money.
 
 You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
+
+If you want to learn about Seleniumwire, Please refer [this](https://github.com/wkeeling/selenium-wire)
+
+This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Seleniumwire & Scraping.
 
 I am trying to find best free sms activation service. If you have any idea, Please let me know.
 
 Thanks.
 
 1. Need to install Python 3.x.
-2. Install Dependencies with "pip install -r requirements.txt"
+2. Install Dependencies with ```pip install -r requirements.txt```
+    - requests==2.27.1
     - selenium==4.8.2
     - selenium_wire==5.1.0
     - webdriver_manager==3.8.5
 3. Run script 
+    - Browser Choice
+        You can use Chrome, Firefox by commenting 2 lines.
+        ```
+        from webdriver_manager.firefox import GeckoDriverManager
+
+        #options = ChromeOptions()
+        options = FirefoxOptions()
+
+        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+        ```
     - Manual Entry for Gmail
         You edit the 'user.csv' with given type such as First name, Last name, Password, Birthday, Username(optional) from the second line.
         If the 5th parameter on user.csv is not passed by userBot generates username automatically adding FN + dot + LN + random 5 digits.(john.doe12345@gmail.com)
+    - Automatic Username with popular names.
+        Thanks to [BourneXu](https://github.com/BourneXu/AutoCreateGmailAccount), I implemented the script to generate Random Popular Usernames.
+        You can set this variant as "True" to use this functionality.
+        ```
+        AUTO_GENERATE_UERINFO = True
+        ```
     - Proxy
-        You can add your own proxy on line 175, then you need to remove comment from line 197-183.
+        You can add your own proxy by removing several comments from the script.
         ```
-        proxy = "socks5://login:password@176.103.246.143:12324" # fixed proxy
+        seleniumwire_options['proxy'] = proxy_options 
+        ```
+        If you want to use socks proxy, please remove comment theses lines.
+        [Free Proxy list](http://free-proxy.cz/en/proxylist/country/all/socks5/ping/all/2) is here
+        ```
+        SOCKS_PROXY = "socks5://user:pass@ip:port"
 
-        'proxy': {
-            'http': proxy,
-            'https': proxy,
-            'no_proxy': 'localhost,127.0.0.1' # excludes
-        },
+        proxy_options['http'] = SOCKS_PROXY
+        proxy_options['https'] = SOCKS_PROXY
+
         ```
-    - Headless (without UI)
+
+        or if you want only http or https proxy, please remove comment these lines. You can remote all if you want to use both.
+        ```
+        HTTP_PROXY = "http://user:pass@ip:port"
+        HTTPS_PROXY = "https://user:pass@ip:port"
+
+        proxy_options['http'] = HTTP_PROXY
+        proxy_options['https'] = HTTPS_PROXY
+        ```
+
+    - Headless or With UI (Optional)
         You can remote comment this line on 190.
         ```
-            chrome_options.add_argument('--headless')
+            options.add_argument('--headless')
         ```
 
     - Profile (Optional)
         You can add your own profile if you want by specifying the path.
         ```
-        chrome_options.add_argument("--incognito")
-        chrome_options.add_argument(r"--user-data-dir=C:\\Users\\username\\AppData\\Local\\Google\\Chrome\\User Data") #e.g. C:\Users\nICE\AppData\Local\Google\Chrome\User Data
-        chrome_options.add_argument(r'--profile-directory=Profile 11')
+        options.add_argument("--incognito")
+        options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
+        options.add_argument(r'--profile-directory=ProfileName')
+        ```
+
+    - Secure Browser (Optional)
+        You can import this cert file into your chrome browser to make secure connection (https).
+        Here's how to import cert file in your [Chrome Browser](https://www.wipo.int/pct-eservices/en/support/cert_import_backup_chrome.html).
+        ```
+        python -m seleniumwire extractcert
+        ```
+        Plus, you need to remove comment this line.
+
+        ```
+        seleniumwire_options['verify_ssl'] = True
         ```
     - Run script 
         ```python app.py``` or ```python3 app.py```
@@ -50,23 +101,25 @@ Thanks.
 3. If an account is created successfully, it will be added to 'created_accounts.txt'.
 
 ## Images
-- Editing the user.csv
-    ![edit_user](./user.jpg)
+- Running
+    ![auto-gmail-creator-leostech](./data/images/auto-gmail-creator-leostech.jpg)
+
+- Edit user.csv
+    With Notepad
+    ![edit-user-notepad](./data/images/user-notepad-leostech.jpg)
+
+    With Excel
+    ![edit-user-excel](./data/images/user-excel-leostech.jpg)
 
 - Bot will create chrome browser repeatedly for each gmail.
-    ![auto-gmail-create-leostech](./gmail-create.jpg)
+    ![auto-gmail-create-leostech](./data/images/gmail-create-leostech.jpg)
 
 - You can visit [sms-activate.org](https://sms-activate.org) to see it's apis.
-    ![sms-activate](./sms.jpg)
+    ![sms-activate](./data/images/sms-leostech.jpg)
 
-    ![auto-gmail-create](./country_code.jpg)
-
-    ![auto-gmail-create](./country_table.jpg)
-    
-
-## Github
-
-https://github.com/leostech
+- To see the country code, you can hit here.
+    ![auto-gmail-creator-leostech](./data/images/country-code-leostech.jpg)
+    ![auto-gmail-creator-leostech](./data/images/country-table-leostech.jpg)
 
 ## Email
 
@@ -80,11 +133,15 @@ https://join.skype.com/invite/H6S0RFA69GNK
 
 https://t.me/softengineer1210
 
+## Github
+
+https://github.com/leostech
+
 ## Phone
 
-+1 229 299 5932
++12292995932
 
-If you like it, Please donate here. Thanks. :)
+If you like it, Please star this repo or folk or donate. Thanks. :)
 
 Ether: 0xb6c9ce60a5db371164c461ec6d3fcae01292eb55
 

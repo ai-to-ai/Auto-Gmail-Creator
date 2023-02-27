@@ -1,86 +1,94 @@
-import numpy
 # from selenium import webdriver
 from seleniumwire import webdriver
 import seleniumwire.undetected_chromedriver as uc
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 import time
 import random
 import datetime
 import requests
 import csv
+import string
 
-# Time to wait for selectors.(second)
+# Option for Auto User info generation
+AUTO_GENERATE_UERINFO = True
+AUTO_GENERATE_NUMBER = 10
+
+# Time to wait for SELECTORS.(second)
 WAIT = 4
 
 # Max Retry to get phone number from sms-activate.org
 REQUEST_MAX_TRY = 10
 
-# These are sample user data you will put in user.csv
-first_name = "All" # First Name
-last_name = "Soft1210" # Last Name
-birthday = "12/30/1990" # Birthday
-
 # Your SMS-Activate API key
-api_key = "9b6b9eb50d0A3020c2710A17d9b7495b"
-country_code = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
+API_KEY = "9b6b9eb50d0A3020c2710A17d9b7495b"
+COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
+
+
 
 sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
 phone_request_params = {
-    "api_key":api_key,
+    "api_key":API_KEY,
     "action":"getNumber",
-    "country":country_code, 
+    "country":COUNTRY_CODE, 
     "service":"go",
 }
 
 status_param = {
-    "api_key":api_key,
+    "api_key":API_KEY,
     "action":"getStatus"
 }
 
-selectors = {
+SELECTORS = {
     "create_account":[
         "//span[contains(text(),'Create account')]",
         "//span[@class='VfPpkd-vQzf8d']"
-        ], #VfPpkd-vQzf8d
+        ],
     'for_my_personal_use':[
-        "//span[contains(text(),'For my personal use')]",
-        "//span[@class='VfPpkd-StrnGf-rymPhb-b9t22c']"
-        ], #VfPpkd-StrnGf-rymPhb-b9t22c
-    "first_name":"//*[@name='firstName']",#whsOnd zHQkBf
-    "last_name":"//*[@name='lastName']",#whsOnd zHQkBf
-    "username":"//*[@name='Username']", #whsOnd zHQkBf
-    "password":"//*[@name='Passwd']", #whsOnd zHQkBf
-    "confirm_password":"//*[@name='ConfirmPasswd']",#whsOnd zHQkBf
+        "//span[@class='VfPpkd-StrnGf-rymPhb-b9t22c']",
+        "//span[contains(text(),'For my personal use')]"
+        ], 
+    "first_name":"//*[@name='firstName']",
+    "last_name":"//*[@name='lastName']",
+    "username":"//*[@name='Username']",
+    "password":"//*[@name='Passwd']",
+    "confirm_password":"//*[@name='ConfirmPasswd']",
     "next":[
             "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b']",
             "//button[contains(text(),'Next')]",
             "//button[contains(text(),'I agree')]"
-    ],#VfPpkd-vQzf8d,
+    ],
     "phone_number":"//*[@id='phoneNumberId']",
     "code":'//input[@name="code"]',
     "acc_phone_number":'//input[@id="phoneNumberId"]',
     "acc_day":'//input[@name="day"]',
     "acc_month":'//select[@id="month"]',
     "acc_year":'//input[@name="year"]',
-    "acc_gender":'//select[@id="gender"]'
+    "acc_gender":'//select[@id="gender"]',
+    "username_warning":'//*[@class="jibhHc"]'
 }
+def generatePassword():
+    chars = string.ascii_uppercase + string.ascii_lowercase + string.digits + string.punctuation
+    size = random.randint(8, 12)
+    return ''.join(random.choice(chars) for x in range(size))
 
 # You can modify this method with your own proxy.
 def getProxy():
-    proxy_list = [
+    PROXIES = [
         "http://kIOLw:B52RK@60.242.64.183:2002",
         "http://kIOLw:B52RK@60.242.64.183:2003",
         "http://kIOLw:B52RK@60.242.64.183:2004",
         ]
 
-    proxy = random.choice(proxy_list)
+    proxy = random.choice(PROXIES)
 
     if "2002" in proxy:
         url = "http://60.242.64.183/api/change_ip?index=2&rtoken=R2NbWa4IZxhnhJBUnk2FVUPbArIvJZ1QSbYNe8p1gJrmPhCbu4"
@@ -170,162 +178,234 @@ def getRandomeUserAgent():
 
 # This method is for chrome driver initialization. You can customize if you want.
 def setDriver():
-    
-    # proxy = getProxy() # rotating proxy
-    proxy = "socks5://login:password@176.103.246.143:12324" # fixed proxy
-    user_agent = getRandomeUserAgent() # random user agent
-    # user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" #fixed agent
-    options = {
-        # 'proxy': {
-        #     'http': proxy,
-        #     'https': proxy,
-        #     'no_proxy': 'localhost,127.0.0.1' # excludes
-        # },
-        # 'ca_cert': './ca.crt',
-        'exclude_hosts': ['google-analytics.com'],
-        # 'verify_ssl': True
-    }
-    profile_path = ""
-    chrome_options = Options()
-    # chrome_options.add_argument('--headless')
+    seleniumwire_options = {}
+    seleniumwire_options['exclude_hosts'] = ['google-analytics.com']
+
+    # Secure Connection
+    # seleniumwire_options['verify_ssl'] = True
+
+    # Set Proxy
+    # proxy = getProxy() # Rotating proxy
+    SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+    # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+    HTTP_PROXY = "http://user:pass@ip:port"
+    HTTPS_PROXY = "https://user:pass@ip:port"
+
+    # Socks5 proxy
+    proxy_options = {}
+    proxy_options['no_proxy']= 'localhost,127.0.0.1'
+
+    # Http proxy
+    # proxy_options['http'] = HTTP_PROXY
+
+    # Https proxy
+    # proxy_options['https'] = HTTPS_PROXY
+
+    # Socks proxy
+    proxy_options['http'] = SOCKS_PROXY
+    proxy_options['https'] = SOCKS_PROXY
+
+    seleniumwire_options['proxy'] = proxy_options
+
+    # Set User Agent
+    user_agent = getRandomeUserAgent() # Random user agent
+    # user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" # Fixed agent
+
+    # Set Browser Option
+    options = ChromeOptions()
+    # options = FirefoxOptions()
+
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
-    chrome_options.add_experimental_option("prefs", prefs)
-    chrome_options.add_experimental_option("useAutomationExtension", False)
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument("disable-popup-blocking")
-    chrome_options.add_argument("disable-notifications")
-    chrome_options.add_argument("disable-popup-blocking")
-    chrome_options.add_argument('--ignore-ssl-errors=yes')
-    chrome_options.add_argument('--ignore-certificate-errors')
-    # chrome_options.add_argument("--incognito")
-    # chrome_options.add_argument(r"--user-data-dir=C:\\Users\\nICE\\AppData\\Local\\Google\\Chrome\\User Data") #e.g. C:\Users\nICE\AppData\Local\Google\Chrome\User Data
-    # chrome_options.add_argument(r'--profile-directory=Profile 11')
-    chrome_options.add_argument(f"user-agent={user_agent}")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = chrome_options, seleniumwire_options=options)
+    options.add_experimental_option("prefs", prefs)
+    options.add_experimental_option("useAutomationExtension", False)
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
+    options.add_argument("disable-popup-blocking")
+    options.add_argument("disable-notifications")
+    options.add_argument("disable-popup-blocking")
+    options.add_argument('--ignore-ssl-errors=yes')
+    options.add_argument('--ignore-certificate-errors')
+
+    # options.add_argument('--headless') # UI
+    # options.add_argument("--incognito")
+    # options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
+    # options.add_argument(r'--profile-directory=ProfileName')
+    options.add_argument(f"user-agent={user_agent}")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+    # driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
 
     return driver
 
 def main():
 
-    with open("user.csv", 'r') as file:
-      csvreader = csv.reader(file)
-      for row in csvreader:
-        try:
-            print(row)
-            if "Firstname" == row[0]:
-                continue
-            first_name = row[0]
-            last_name = row[1]
-            mypw = row[2]
-            birthday = row[3]
+    user_number = 0
+    i = 0
 
+    if(AUTO_GENERATE_UERINFO):
+        user_number = AUTO_GENERATE_NUMBER
+        print('################ Open First_Name_DB.csv ################')
+        try:
+            first_name_file = open("./data/First_Name_DB.csv", 'r')
+            first_names = csv.reader(first_name_file)
+            first_names = list(first_names)
+        except:
+            print('################ Please check if First_Name_DB.csv exists ################')
+            quit()
+
+        print('################ Open Last_Name_DB.csv ################')
+        try:
+            last_name_file = open("./data/Last_Name_DB.csv", 'r')
+            last_names = csv.reader(last_name_file)
+            last_names = list(last_names)
+        except:
+            print('################ Please check if Last_Name_DB.csv exists ################')
+            quit()
+    else:
+        print('################ Open User.csv ################')
+        try:
+            user_info_file = open("User.csv", 'r')
+            user_infos = csv.reader(user_info_file)
+            user_infos = list(user_infos)
+            user_number = len(user_infos)
+        except:
+            print('################ Please check if User.csv exists ################')
+            quit()
+
+    while True:
+        try:
+            # Check if the count reach to the maxium users.
+            
+            if i == user_number:
+                break
+
+            i = i + 1
+            print('################ User:', i,' ################')
+            if AUTO_GENERATE_UERINFO:
+                first_name = random.choice(first_names)[0]
+                last_name = random.choice(last_names)[0]
+                password = generatePassword()
+                birthday = str(random.randint(1,12)) + "/" + str(random.randint(1,28)) + "/" +  str(random.randint(1980,1999))
+                user_name_manual = ""
+                print(first_name + "\t" + last_name + "\t" + password + '\t' + birthday)
+            else:
+                row = user_infos[i]
+                if "Firstname" == row[0]:
+                    continue
+
+                first_name = row[0]
+                last_name = row[1]
+                password = row[2]
+                birthday = row[3]
+                print(first_name + "\t" + last_name + "\t" + password + '\t' + birthday)
             try:
                 user_name_manual = row[4]
             except:
                 user_name_manual = ""
 
-            print('Start...')
-            # get driver.
-            
+            print('################ Initialize Chrome Driver ################')
             driver = setDriver()
 
+            print('################ Go to account page ################')
             driver.get("https://accounts.google.com")
-
-
-            print('################# Go to account page ############################')
-            for selector in selectors["create_account"]:
-                try:
-                    print(selector)
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
-                    break
-                except:
-                    pass
-            print('################# Click "For my personal use" ###################')
-            for selector in selectors["for_my_personal_use"]:
-                try:
-                    print(selector)
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
-                    break
-                except:
-                    pass
-
             
+            print('################ Click "Create account" ################')
+            for selector in SELECTORS["create_account"]:
+                try:
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                    break
+                except:
+                    pass
+            print('################ Click "For my personal use" ################')
+            for selector in SELECTORS["for_my_personal_use"]:
+                try:
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                    break
+                except:
+                    pass
+
             username_try = 0
 
             # if the username exists, it retries REQUEST_MAX_TRY times.
             while username_try < REQUEST_MAX_TRY:
                 time.sleep(WAIT*2)
-                print("Username Retrial: ", username_try)
+                print("################ Generate User Try: ", username_try+1, " ################")
                 # set the first name.
-                print('################# Set First Name ####################')
-                first_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['first_name'])))
+                print('################ Set First Name ################')
+                first_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['first_name'])))
                 first_name_tag.clear()
                 first_name_tag.send_keys(first_name)
 
                 # set the surname.
-                print('################# Set Last Name ####################')
-                last_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['last_name'])))
+                print('################ Set Last Name ################')
+                last_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['last_name'])))
                 last_name_tag.clear()
                 last_name_tag.send_keys(last_name)
                 # set username
-                print('################# Set User Name ####################')
+                print('################ Set User Name ################')
                 if user_name_manual == "":
                     rand_5_digit_num = random.randint(10000,99999)
                     user_name = first_name +"."+ last_name
                     user_name = user_name.lower() + str(rand_5_digit_num)
                 else:
                     user_name = user_name_manual
-                user_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['username'])))
+                user_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username'])))
                 user_name_tag.clear()
                 user_name_tag.send_keys(user_name)
 
                 # set password
-                print('################# Set Password ####################')
-                passwd_tag =WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['password'])))
+                print('################ Set Password ################')
+                passwd_tag =WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['password'])))
                 passwd_tag.clear()
-                passwd_tag.send_keys(mypw)
+                passwd_tag.send_keys(password)
 
-                print('################# Set Confirm Password ####################')
-                confirmwd_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['confirm_password'])))
+                print('################ Set Confirm Password ################')
+                confirmwd_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['confirm_password'])))
                 confirmwd_tag.clear()
-                confirmwd_tag.send_keys(mypw)
+                confirmwd_tag.send_keys(password)
 
                 #click next button
-                print('################# Click "Next" Buton ####################')
-                for selector in selectors['next']:
+                print('################ Click "Next" Buton ################')
+                for selector in SELECTORS['next']:
                     try:
-                        print(selector)
                         WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
                         break
                     except:
                         pass
                 time.sleep(WAIT*2)
-
-                print('################## Check if it needs phone verification on current ip address.')
+                print('################ Check Username Validation ################')
+                try:
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username_warning'])))
+                    user_name_manual = ""
+                    print("Invalid")
+                    username_try = username_try + 1
+                    continue
+                except:
+                    print("Valid")
+                    pass
+                print('################ Check Phone Verification ################')
                 without_verification = False
                 try:
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_day'])))
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_day'])))
                     without_verification = True
                     print("No. It doesn't require.")
                     break
                 except:
                     print("Yes. It requires")
                     pass
-                print('################# Phone Number ####################')
+                print('################ Input Phone Number ################')
                 try:
-                    phone_number_input = WebDriverWait(driver, WAIT*3).until(EC.presence_of_element_located((By.XPATH, selectors['phone_number'])))
+                    phone_number_input = WebDriverWait(driver, WAIT*3).until(EC.presence_of_element_located((By.XPATH, SELECTORS['phone_number'])))
                     time.sleep(WAIT)
                     break
                 except:
                     username_try = username_try + 1
-                    pass
             number = ""
             activationId = ""
             count = 0
             if without_verification == False:
-                print('################ Get Virtual Phone Number from SMS_Activate ##############')
+                print('################ Get Phone Number from SMS_Activate ################')
                 while(count < REQUEST_MAX_TRY):
                     res = requests.get(url=sms_activate_url,params = phone_request_params)
                     data = res.text
@@ -337,25 +417,27 @@ def main():
                         number = '+'+ number
                         print(number)
                         break
+                    if "NO_BALANCE" in data:
+                        print("Check your Balance in sms-activate.")
+                        quit()
                     count = count+1
                     time.sleep(WAIT)
                 if number == '':
-                    print("Cannot get virtual phone number: ", REQUEST_MAX_TRY, " times retry.")
+                    print("################ Cannot get phone number: ", REQUEST_MAX_TRY, " times retrial. ################")
                     raise Exception("Go to next account.")
                 
                 phone_number_input.send_keys(number)
 
                 #click next button
-                print('################# Click "Next" Buton ####################')
-                for selector in selectors['next']:
+                print('################ Click "Next" Buton ################')
+                for selector in SELECTORS['next']:
                     try:
-                        print(selector)
                         WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
                         break
                     except:
                         pass
 
-                print('############################# Get SMS Code from SMS_Activate ###########################')
+                print('################ Get SMS Code from SMS_Activate ################')
                 time.sleep(WAIT)
 
                 count_status = 0
@@ -369,7 +451,6 @@ def main():
                     print(data_code)
                     if "STATUS_OK" in data_code:
                         code = data_code.split(':')[1]
-                        print(code)
                         break
 
                     count_status = count_status + 1
@@ -379,64 +460,69 @@ def main():
                     print('Cannot receive code from sms_activate: ',REQUEST_MAX_TRY, " times retrial")
                     raise Exception("Go to next account.")
 
-                print('################# Verify Code ####################')  
-                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['code']))).send_keys(code)
+                print('################ Verify Phone Code ################')  
+                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['code']))).send_keys(code)
 
                 #click next button
-                print('################# Click "Verify" Buton ####################')
-                for selector in selectors['next']:
+                print('################ Click "Verify" Buton ################')
+                for selector in SELECTORS['next']:
                     try:
-                        print(selector)
                         WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
                         break
                     except:
                         pass
 
             time.sleep(WAIT*2)
-            print('################# Account Phone Number ####################')
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_phone_number']))).clear()
+            print('################ Clear Account Phone Number ################')
+            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_phone_number']))).clear()
 
-            print('################# Account Birthday ####################')   
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_day']))).send_keys(birthday.split('/')[1])
+            print('################ Account Birthday ################')
+            # Date   
+            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_day']))).send_keys(birthday.split('/')[1])
             
-            select_acc_month = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_month'])))
+            # Month
+            select_acc_month = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_month'])))
 
             acc_month = Select(select_acc_month)
             acc_month.select_by_value(birthday.split('/')[0])
 
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_year']))).send_keys(birthday.split('/')[2])
+            # Year
+            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_year']))).send_keys(birthday.split('/')[2])
 
+            select_acc_gender = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_gender'])))
 
-            select_acc_gender = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selectors['acc_gender'])))
-
+            # Gender
             acc_gender = Select(select_acc_gender)
             acc_gender.select_by_value('1')
 
-            print('################# Click "Next" Buton ####################')
-            for selector in selectors['next']:
+            print('################ Click "Next" Buton ################')
+            for selector in SELECTORS['next']:
                 try:
-                    print(selector)
                     WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
                     break
                 except:
                     pass
-            print('################# Click "I agree" Buton ####################')
+            print('################ Click "I agree" Buton ################')
             time.sleep(WAIT)
+
+            # Scroll to click "I agree"
             driver.execute_script("window.scrollTo(0, 800)") 
             time.sleep(WAIT)
-            for selector in selectors['next']:
+            for selector in SELECTORS['next']:
                 try:
-                    print(selector)
                     WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
                     break
                 except:
                     pass
-            time.sleep(WAIT*4)
-            f = open('created_accounts.txt', 'a')
-            f.write(user_name + "    " + mypw + "\n")
+            time.sleep(WAIT*3)
+            print('################ Save to Created.txt ################')
+            f = open('Created.txt', 'a')
+            f.write(user_name + "\t" + password + "\t" +birthday + "\n")
             f.close()
+
             driver.quit()
         except:
             driver.quit()
 
+    user_info_file.close()
 main()
