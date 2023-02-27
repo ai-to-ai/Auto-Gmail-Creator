@@ -46,8 +46,6 @@ Thanks.
         [Free Proxy list](http://free-proxy.cz/en/proxylist/country/all/socks5/ping/all/2) is here
         ```
         SOCKS_PROXY = "socks5://user:pass@ip:port"
-        HTTP_PROXY = "http://user:pass@ip:port"
-        HTTPS_PROXY = "https://user:pass@ip:port"
         ```
 
     - Headless or With UI (Optional)
