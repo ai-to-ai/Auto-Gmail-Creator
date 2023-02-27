@@ -3,18 +3,17 @@
 ## Description
 Latest Open Source Bulk Auto Google Gccount Regiteration script 2023
 
-According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number.
-To avoid this limitation, I recommend to use SMS activation services.
+    According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number. To avoid this limitation, I recommend to use SMS activation services.
 
-This script uses [sms-activate.org](https://sms-activate.org) api for phone verification but please note that they charge tiny money.
+    This script uses [sms-activate.org](https://sms-activate.org) api for phone verification but please note that they charge tiny money.
 
-You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
+    You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
 
-This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Scraping.
+    This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Scraping.
 
-I am trying to find best free sms activation service. If you have any idea, Please let me know.
+    I am trying to find best free sms activation service. If you have any idea, Please let me know.
 
-Thanks.
+    Thanks.
 
 1. Need to install Python 3.x.
 2. Install Dependencies with ```pip install -r requirements.txt```
