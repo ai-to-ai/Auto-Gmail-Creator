@@ -3,7 +3,7 @@
 ## Description
 Latest Open Source Bulk Auto Google Gccount Regiteration script 2023
 
-<a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+<a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
 According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number. To avoid this limitation, I recommend to use SMS activation services.
 
