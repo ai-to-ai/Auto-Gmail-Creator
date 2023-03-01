@@ -62,6 +62,7 @@ You can add your own profile if you want by specifying the path.
     ![auto-gmail-creator-leostech](./data/images/auto-gmail-creator-leostech.jpg)
 
 - Edit user.csv
+
     With Notepad
     ![edit-user-notepad](./data/images/user-notepad-leostech.jpg)
 
