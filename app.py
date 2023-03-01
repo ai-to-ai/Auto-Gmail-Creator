@@ -18,6 +18,7 @@ import requests
 import csv
 import string
 from fp.fp import FreeProxy
+from fake_useragent import UserAgent
 
 # Option for Auto User info generation
 AUTO_GENERATE_UERINFO = False
@@ -32,12 +33,6 @@ REQUEST_MAX_TRY = 10
 # Your SMS-Activate API key
 API_KEY = "" #9b6b9eb50d0A30---------d9b7495b
 COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
-# proxy = FreeProxy(country_id=['US']).get()
-# SOCKS_PROXY = "188.166.56.246:80" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-# SOCKS_PROXY = proxy # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-HTTP_PROXY = "http://user:pass@ip:port"
-# HTTPS_PROXY = "https://user:pass@ip:port"
 
 sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
 phone_request_params = {
@@ -78,6 +73,11 @@ SELECTORS = {
     "acc_gender":'//select[@id="gender"]',
     "username_warning":'//*[@class="jibhHc"]'
 }
+proxy_list = None
+with open("./data/Proxy_DB.csv", 'r') as proxy_list_file:
+    proxy_list = csv.reader(proxy_list_file)
+    proxy_list = list(proxy_list)
+
 def generatePassword():
     chars = string.ascii_uppercase + string.ascii_lowercase + string.digits + string.punctuation
     size = random.randint(8, 12)
@@ -172,23 +172,33 @@ def setDriver():
     # proxy = getProxy() # Rotating proxy
     # SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
     # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
-    SOCKS_PROXY = 'socks5://158.69.225.110:59166'
-    HTTP_PROXY = "http://user:pass@ip:port"
-    HTTPS_PROXY = "https://user:pass@ip:port"
+    # SOCKS_PROXY = 'socks5://158.69.225.110:59166'
 
-    # Socks5 proxy
+    # https://pypi.org/project/free-proxy/
+    try:
+        random_proxy = FreeProxy(timeout=1).get()
+        print('################ Use FreeProxy library to get HTTP proxy ################')
+    except:
+        print('################ Use Proxy DB to get HTTP proxy ################')
+        random_proxy = "http://"+ random.choice(proxy_list)[0]
+
+    HTTP_PROXY = random_proxy
+    print(HTTP_PROXY)
+    # HTTPS_PROXY = "https://user:pass@ip:port"
+
+    # Proxy
     proxy_options = {}
     proxy_options['no_proxy']= 'localhost,127.0.0.1'
 
-    # Http proxy
-    # proxy_options['http'] = HTTP_PROXY
+    ## Http proxy
+    proxy_options['http'] = HTTP_PROXY
 
-    # Https proxy
+    ## Https proxy
     # proxy_options['https'] = HTTPS_PROXY
 
-    # Socks proxy
-    proxy_options['http'] = SOCKS_PROXY
-    proxy_options['https'] = SOCKS_PROXY
+    ## Socks proxy
+    # proxy_options['http'] = SOCKS_PROXY
+    # proxy_options['https'] = SOCKS_PROXY
 
     seleniumwire_options['proxy'] = proxy_options
     # prox = Proxy()
@@ -204,9 +214,11 @@ def setDriver():
     # prox.add_to_capabilities(capabilities)
 
     # Set User Agent
-    user_agent = getRandomeUserAgent() # Random user agent
+    # user_agent = getRandomeUserAgent() # Random user agent
     # user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" # Fixed agent
-
+    # Please refer to this https://github.com/fake-useragent/fake-useragent
+    user_agent = UserAgent(fallback="Mozilla/5.0 (Macintosh; Intel Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36").random
+    print(user_agent)
     # Set Browser Option
     options = ChromeOptions()
     # options = FirefoxOptions()
@@ -235,7 +247,6 @@ def setDriver():
     return driver
 
 def main():
-
     user_number = 0
     i = 0
 
