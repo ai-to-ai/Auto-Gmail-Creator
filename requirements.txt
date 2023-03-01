@@ -1,3 +1,6 @@
+fake_useragent==1.1.1
+fp==0.2
+free_proxy==1.1.1
 requests==2.27.1
 selenium==4.8.2
 selenium_wire==5.1.0

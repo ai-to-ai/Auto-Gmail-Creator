@@ -1,73 +1,61 @@
 # Auto-Gmail-Creator
 
-## Description
+## Summary
 Latest Open Source Bulk Auto Google Gccount Regiteration script 2023
 
 <a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
-According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number. To avoid this limitation, I recommend to use SMS activation services.
+According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number.
 
-This script uses [sms-activate.org](https://sms-activate.org) api for phone verification but please note that they charge tiny money.
+This script uses [sms-activate.org](https://sms-activate.org) api for phone verification and more services will be added.
 
-You don't need to download Chromedriver manually. The script does it automatically with webdriver manager. Is it helpful? But you need to use Chrome Browser in your PC in general.
+To run the script, you don't need to download Chromedriver or Geckodriver manually. The script does it automatically with webdriver manager.
 
-This is an Auto Gmail Creator script but you can refer this repo to learn Selenium & Scraping.
+## Usage
+1. Install Python 3.x.
+2. ```pip install -r requirements.txt``` 
+3. ```python app.py```
+4. 'Created.txt' will be generated for successful creation.
 
-I am trying to find best free sms activation service. If you have any idea, Please let me know.
+## Customize
+### Browser [ Chrome, Firefox ]
+Switch from Chrome to Firefox by commenting 2 lines.
+```
+#options = ChromeOptions()
+options = FirefoxOptions()
 
-Thanks.
+#driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
 
-1. Need to install Python 3.x.
-2. Install Dependencies with ```pip install -r requirements.txt```
-    - requests==2.27.1
-    - selenium==4.8.2
-    - selenium_wire==5.1.0
-    - webdriver_manager==3.8.5
-3. Run script 
-    - Browser Choice
-        You can use Chrome, Firefox by commenting 2 lines.
-        ```
-        #options = ChromeOptions()
-        options = FirefoxOptions()
+driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
 
-        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+    ```
+### Manual or Automatic User info generation
+You edit the 'User.csv' with given type such as First name, Last name, Password, Birthday, Username(optional) from the second line.
+If the 5th parameter on user.csv is not passed by userBot generates username automatically adding FN + dot + LN + random 5 digits.(john.doe12345@gmail.com)
+Thanks to [BourneXu](https://github.com/BourneXu/AutoCreateGmailAccount), Script generates random popular usernames.
+You can set this variant as "True" to use this functionality to automate generation.
+```
+AUTO_GENERATE_UERINFO = True
+```
+### Proxy
+If you want to use socks proxy, please remove comment theses lines.
+[Free Proxy list](http://free-proxy.cz/en/proxylist/country/all/socks5/ping/all/2) is here
+```
+    SOCKS_PROXY = "socks5://user:pass@ip:port"
+```
 
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
-    
-        ```
-    - Manual Entry for Gmail
-        You edit the 'user.csv' with given type such as First name, Last name, Password, Birthday, Username(optional) from the second line.
-        If the 5th parameter on user.csv is not passed by userBot generates username automatically adding FN + dot + LN + random 5 digits.(john.doe12345@gmail.com)
-    - Automatic Username with popular names.
-        Thanks to [BourneXu](https://github.com/BourneXu/AutoCreateGmailAccount), I implemented the script to generate Random Popular Usernames.
-        You can set this variant as "True" to use this functionality.
-        ```
-        AUTO_GENERATE_UERINFO = True
-        ```
-    - Proxy
-        If you want to use socks proxy, please remove comment theses lines.
-        [Free Proxy list](http://free-proxy.cz/en/proxylist/country/all/socks5/ping/all/2) is here
-        ```
-        SOCKS_PROXY = "socks5://user:pass@ip:port"
-        ```
+### Headless or With UI (Optional)
+```
+    options.add_argument('--headless')
+```
 
-    - Headless or With UI (Optional)
-        You can remote comment this line on 190.
-        ```
-            options.add_argument('--headless')
-        ```
-
-    - Profile (Optional)
-        You can add your own profile if you want by specifying the path.
-        ```
-        options.add_argument("--incognito")
-        options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
-        options.add_argument(r'--profile-directory=ProfileName')
-        ```
-    - Run script 
-        ```python app.py``` or ```python3 app.py```
-
-3. If an account is created successfully, it will be added to 'Created.txt'.
+### Profile (Optional)
+You can add your own profile if you want by specifying the path.
+```
+    options.add_argument("--incognito")
+    options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
+    options.add_argument(r'--profile-directory=ProfileName')
+```
 
 ## Images
 - Running
