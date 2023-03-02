@@ -1,7 +1,7 @@
 # Auto-Gmail-Creator
 
 ## Summary
-Latest Open Source Bulk Auto Google Gccount Regiteration script 2023
+Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2023
 
 <a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
