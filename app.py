@@ -202,14 +202,14 @@ def setDriver():
     proxy_options['no_proxy']= 'localhost,127.0.0.1'
 
     ## Http proxy
-    # proxy_options['http'] = HTTP_PROXY
+    proxy_options['http'] = HTTP_PROXY
 
     ## Https proxy
     # proxy_options['https'] = HTTPS_PROXY
 
     ## Socks proxy
-    proxy_options['http'] = SOCKS_PROXY
-    proxy_options['https'] = SOCKS_PROXY
+    # proxy_options['http'] = SOCKS_PROXY
+    # proxy_options['https'] = SOCKS_PROXY
 
     seleniumwire_options['proxy'] = proxy_options
     # prox = Proxy()
