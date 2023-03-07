@@ -56,6 +56,9 @@ You can add your own profile if you want by specifying the path.
     options.add_argument(r"--user-data-dir=C:\\Users\\Username\\AppData\\Local\\Google\\Chrome\\User Data")
     options.add_argument(r'--profile-directory=ProfileName')
 ```
+## To-Do
+Try to simulate user's mouse action wity pyautogui and adding cookie, recovery email, more sms services such as Durian, 5sims.
+To bypass bot-detection, I am all ears to hear from you.
 
 ## Images
 - Running
@@ -89,7 +92,7 @@ https://join.skype.com/invite/H6S0RFA69GNK
 
 ## Telegram
 
-https://t.me/softengineer1210
+https://t.me/leostech
 
 ## Github
 

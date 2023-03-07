@@ -24,6 +24,9 @@ from fake_useragent import UserAgent
 AUTO_GENERATE_UERINFO = False
 AUTO_GENERATE_NUMBER = 10
 
+# Include Refer URL
+INCLUDE_REFER_URL = False
+
 # Time to wait for SELECTORS.(second)
 WAIT = 4
 
@@ -49,7 +52,8 @@ status_param = {
 
 SELECTORS = {
     "create_account":[
-        "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-dgl2Hf ksBjEc lKxP2d LQeN7 FliLIb uRo0Xe TrZEUc Xf9GD']"
+        "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-dgl2Hf ksBjEc lKxP2d LQeN7 FliLIb uRo0Xe TrZEUc Xf9GD']",
+        "//*[@class='JnOM6e TrZEUc kTeh9 KXbQ4b']"
         ],
     'for_my_personal_use':[
         "//span[@class='VfPpkd-StrnGf-rymPhb-b9t22c']",
@@ -71,8 +75,15 @@ SELECTORS = {
     "acc_month":'//select[@id="month"]',
     "acc_year":'//input[@name="year"]',
     "acc_gender":'//select[@id="gender"]',
-    "username_warning":'//*[@class="jibhHc"]'
+    "username_warning":'//*[@class="jibhHc"]',
 }
+# https://webflow.com/made-in-webflow/fast , I tried to find the fast websites and you can add more.
+SITE_LIST = [
+    'https://google.com',
+    'https://wizardrytechnique.webflow.io/',
+    'https://www.rachelbavaresco.com/',
+    'https://lightning-bolt.webflow.io/'
+]
 proxy_list = None
 with open("./data/Proxy_DB.csv", 'r') as proxy_list_file:
     proxy_list = csv.reader(proxy_list_file)
@@ -170,7 +181,7 @@ def setDriver():
 
     # Set Proxy
     # proxy = getProxy() # Rotating proxy
-    # SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+    SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
     # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
     # SOCKS_PROXY = 'socks5://158.69.225.110:59166'
 
@@ -191,14 +202,14 @@ def setDriver():
     proxy_options['no_proxy']= 'localhost,127.0.0.1'
 
     ## Http proxy
-    proxy_options['http'] = HTTP_PROXY
+    # proxy_options['http'] = HTTP_PROXY
 
     ## Https proxy
     # proxy_options['https'] = HTTPS_PROXY
 
     ## Socks proxy
-    # proxy_options['http'] = SOCKS_PROXY
-    # proxy_options['https'] = SOCKS_PROXY
+    proxy_options['http'] = SOCKS_PROXY
+    proxy_options['https'] = SOCKS_PROXY
 
     seleniumwire_options['proxy'] = proxy_options
     # prox = Proxy()
@@ -314,24 +325,48 @@ def main():
             print('################ Initialize Chrome Driver ################')
             driver = setDriver()
 
-            print('################ Go to account page ################')
-            driver.get("https://accounts.google.com")
-            time.sleep(WAIT)
+            print('################ Random Refer website to bypass Google Bot Detection ################')
+            if INCLUDE_REFER_URL:
+                random_url = random.choice(SITE_LIST)
+                driver.get(random_url)
+
+            # 4 ways to go to account creation page.
+            random_int = random.randint(1,4)
+            if random_int ==  1:
+
+                print('################ Creat a google account article ################')
+                driver.get('https://support.google.com/accounts/answer/27441?hl=en')
+                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH,'//*[@id="hcfe-content"]/section/div/div[1]/article/section/div/div[1]/div/div[2]/a[1]'))).click()
+                time.sleep(WAIT)
+            elif random_int == 2:
+                print('################ Go to account page ################')
+                driver.get("https://accounts.google.com")
+
+                time.sleep(WAIT)
+                
+                print('################ Click "Create account" ################')
+                for selector in SELECTORS["create_account"]:
+                    try:
+                        WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                        break
+                    except:
+                        pass
+                print('################ Click "For my personal use" ################')
+                for selector in SELECTORS["for_my_personal_use"]:
+                    try:
+                        WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                        break
+                    except:
+                        pass
+
+            elif random_int == 3:
+                driver.get('https://accounts.google.com/signup/v2/webcreateaccount?flowName=GlifWebSignIn&flowEntry=SignUp')
+                time.sleep(WAIT)
             
-            print('################ Click "Create account" ################')
-            for selector in SELECTORS["create_account"]:
-                try:
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
-                    break
-                except:
-                    pass
-            print('################ Click "For my personal use" ################')
-            for selector in SELECTORS["for_my_personal_use"]:
-                try:
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
-                    break
-                except:
-                    pass
+            elif random_int == 4:
+                driver.get('https://support.google.com/mail/answer/56256?hl=en')
+                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH,'//*[@id="hcfe-content"]/section/div/div[1]/article/section/div/div[1]/div/p[1]/a'))).click()
+                time.sleep(WAIT)
 
             username_try = 0
 
@@ -482,7 +517,7 @@ def main():
 
             time.sleep(WAIT*2)
             print('################ Clear Account Phone Number ################')
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_phone_number']))).clear()
+            # WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_phone_number']))).clear()
 
             print('################ Account Birthday ################')
             # Date   
@@ -525,11 +560,12 @@ def main():
             time.sleep(WAIT*3)
             print('################ Save to Created.txt ################')
             f = open('Created.txt', 'a')
-            f.write(user_name + "\t" + password + "\t" +birthday + "\n")
+            f.write(user_name + "\t" + password + "\t" +birthday + "\t"+ number + "\n")
             f.close()
 
             driver.quit()
-        except:
+        except Exception as e:
+            print(e)
             driver.quit()
 
     user_info_file.close()
