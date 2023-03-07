@@ -379,6 +379,7 @@ def main():
                 first_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['first_name'])))
                 first_name_tag.clear()
                 time.sleep(WAIT/2)
+                print(first_name)
                 first_name_tag.send_keys(first_name)
 
                 # set the surname.
@@ -396,6 +397,7 @@ def main():
                     user_name = user_name_manual
                 user_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username'])))
                 user_name_tag.clear()
+                print(user_name)
                 time.sleep(WAIT/2)
                 user_name_tag.send_keys(user_name)
 
