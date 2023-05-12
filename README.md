@@ -84,25 +84,26 @@ To bypass bot-detection, I am all ears to hear from you.
 
 ## Email
 
-tr.soft.engineer@gmail.com
+leoshabit@gmail.com
+
+## Telegram
+
+https://t.me/leoshabit
+
+## Discord
+
+leoshabit#0825
 
 ## Skype
 
 https://join.skype.com/invite/H6S0RFA69GNK
 
-## Telegram
-
-https://t.me/leostech
 
 ## Github
 
-https://github.com/leostech
+https://github.com/leoshabit
 
 ## Phone
 
 +12292995932
-
-If you like it, Please star this repo or folk or donate. Thanks. :)
-
-Ether: 0xb6c9ce60a5db371164c461ec6d3fcae01292eb55
 
