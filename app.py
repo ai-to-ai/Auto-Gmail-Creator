@@ -570,7 +570,8 @@ def main():
             driver.quit()
         except Exception as e:
             print(e)
-            driver.quit()
+            if driver is not None:
+                driver.quit()
 
     user_info_file.close()
 main()
