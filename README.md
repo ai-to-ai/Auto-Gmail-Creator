@@ -5,7 +5,7 @@ Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 20
 
 <a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a> <img align="left" src="https://visitor-badge.laobi.icu/badge?page_id=leostech.leostech" />
 
-[![Stargazers over time](https://starchart.cc/leoshabit/Auto-Gmail-Creator/badges.svg)](https://starchart.cc/leoshabit/Auto-Gmail-Creator/badges)
+[![Stargazers over time](https://starchart.cc/leoshabit/badges.svg)](https://starchart.cc/leoshabit/badges)
 
 According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number.
 
