@@ -11,6 +11,10 @@ This script uses [sms-activate.org](https://sms-activate.org) api for phone veri
 
 To run the script, you don't need to download Chromedriver or Geckodriver manually. The script does it automatically with webdriver manager.
 
+You can customize this script to avoid getting blocked. I am also developing another script with Requests but going to keep it private since it will be blocked if I let it public.
+
+Also, Feel free to contact me if you have any project regarding Automation, Scraping, Machine Learning.
+
 ## Usage
 1. Install Python 3.x.
 2. ```pip install -r requirements.txt``` 
