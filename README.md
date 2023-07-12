@@ -1,5 +1,7 @@
 # Auto-Gmail-Creator
 
+## Important Note:
+Google changed their account creation interface in July 2023, I am upgrading my repository. If you donate to buy sms-activate.org api key to test, I will give you more benefits. Thanks
 ## Summary
 Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2023
 
