@@ -241,7 +241,7 @@ def setDriver():
     # options.add_argument(r'--profile-directory=ProfileName')
     options.add_argument(f"user-agent={user_agent}")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager(version="114.0.5735.90").install()), options = options, seleniumwire_options=seleniumwire_options)
     #driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options = options, seleniumwire_options=seleniumwire_options)
     
     return driver
