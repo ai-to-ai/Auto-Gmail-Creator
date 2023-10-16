@@ -21,7 +21,7 @@ from fp.fp import FreeProxy
 from fake_useragent import UserAgent
 
 # Option for Auto User info generation
-AUTO_GENERATE_UERINFO = False
+AUTO_GENERATE_UERINFO = True
 AUTO_GENERATE_NUMBER = 10
 
 # Include Refer URL
@@ -34,7 +34,7 @@ WAIT = 4
 REQUEST_MAX_TRY = 10
 
 # Your SMS-Activate API key
-API_KEY = "" #9b6b9eb50d0A30---------d9b7495b
+API_KEY = "8e49fdB90d0209c085dd1df56cedf00e" #9b6b9eb50d0A30---------d9b7495b
 COUNTRY_CODE = "175" #i.e, Austrailian country code, See country table in sms-activate. I often use Australian phone number and it works almost always.
 
 sms_activate_url = "https://sms-activate.org/stubs/handler_api.php"
@@ -62,7 +62,7 @@ SELECTORS = {
     "last_name":"//*[@name='lastName']",
     "username":"//*[@name='Username']",
     "password":"//*[@name='Passwd']",
-    "confirm_password":"//*[@name='ConfirmPasswd']",
+    "confirm_password":"//*[@name='PasswdAgain']",
     "next":[
             "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b']",
             "//button[contains(text(),'Next')]",
@@ -76,6 +76,7 @@ SELECTORS = {
     "acc_year":'//input[@name="year"]',
     "acc_gender":'//select[@id="gender"]',
     "username_warning":'//*[@class="jibhHc"]',
+    "username_select":'//*[@aria-posinset="3"]'
 }
 # https://webflow.com/made-in-webflow/fast , I tried to find the fast websites and you can add more.
 SITE_LIST = [
@@ -181,7 +182,7 @@ def setDriver():
 
     # Set Proxy
     # proxy = getProxy() # Rotating proxy
-    SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@176.103.246.143:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
+    SOCKS_PROXY = "socks5://14ab1e7131541:39d813de77@198.143.22.234:12324" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
     # SOCKS_PROXY = "socks5://user:pass@ip:port" # Fixed proxy, i.e socks5://14ab1e7131541:39d813de77@176.103.246.143:12324
     # SOCKS_PROXY = 'socks5://158.69.225.110:59166'
 
@@ -208,8 +209,8 @@ def setDriver():
     # proxy_options['https'] = HTTPS_PROXY
 
     ## Socks proxy
-    # proxy_options['http'] = SOCKS_PROXY
-    # proxy_options['https'] = SOCKS_PROXY
+    proxy_options['http'] = SOCKS_PROXY
+    proxy_options['https'] = SOCKS_PROXY
 
     seleniumwire_options['proxy'] = proxy_options
     # prox = Proxy()
@@ -373,9 +374,13 @@ def main():
             # if the username exists, it retries REQUEST_MAX_TRY times.
             while username_try < REQUEST_MAX_TRY:
                 time.sleep(WAIT*2)
+
+                print('################ 1st step of Creation Wizard. ################')
+
+
                 print("################ Generate User Try: ", username_try+1, " ################")
                 # set the first name.
-                print('################ Set First Name ################')
+                print('################ First Name ################')
                 first_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['first_name'])))
                 first_name_tag.clear()
                 time.sleep(WAIT/2)
@@ -383,10 +388,51 @@ def main():
                 first_name_tag.send_keys(first_name)
 
                 # set the surname.
-                print('################ Set Last Name ################')
+                print('################ Last Name ################')
                 last_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['last_name'])))
                 last_name_tag.clear()
                 last_name_tag.send_keys(last_name)
+
+                #click next button
+                print('################ "Next" ################')
+                for selector in SELECTORS['next']:
+                    try:
+                        WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                        break
+                    except:
+                        pass
+                time.sleep(WAIT*2)
+
+                print('################ 2st step of Creation Wizard. ################')
+                print('################ Birthday & Gender ################')
+                # Date   
+                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_day']))).send_keys(birthday.split('/')[1])
+                
+                # Month
+                select_acc_month = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_month'])))
+
+                acc_month = Select(select_acc_month)
+                acc_month.select_by_value(birthday.split('/')[0])
+
+                # Year
+                WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_year']))).send_keys(birthday.split('/')[2])
+
+                select_acc_gender = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_gender'])))
+
+                # Gender
+                acc_gender = Select(select_acc_gender)
+                acc_gender.select_by_value('1')
+
+               #click next button
+                print('################ Click "Next" Buton ################')
+                for selector in SELECTORS['next']:
+                    try:
+                        WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                        break
+                    except:
+                        pass
+                time.sleep(WAIT*2)
+
                 # set username
                 print('################ Set User Name ################')
                 if user_name_manual == "":
@@ -395,11 +441,39 @@ def main():
                     user_name = user_name.lower() + str(rand_5_digit_num)
                 else:
                     user_name = user_name_manual
-                user_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username'])))
-                user_name_tag.clear()
-                print(user_name)
-                time.sleep(WAIT/2)
-                user_name_tag.send_keys(user_name)
+                try:
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username_select']))).click()
+                except:
+                    pass
+                try:
+                    user_name_tag = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username'])))
+                    user_name_tag.clear()
+                    print(user_name)
+                    time.sleep(WAIT/2)
+                    user_name_tag.send_keys(user_name)
+                # time.sleep(WAIT*1000)
+                except:
+                    pass
+
+                #click next button
+                print('################ Click "Next" Buton ################')
+                for selector in SELECTORS['next']:
+                    try:
+                        WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, selector))).click()
+                        break
+                    except:
+                        pass
+                time.sleep(WAIT*2)
+                print('################ Check Username Validation ################')
+                try:
+                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username_warning'])))
+                    user_name_manual = ""
+                    print("Invalid")
+                    username_try = username_try + 1
+                    continue
+                except:
+                    print("Valid")
+                    pass
 
                 # set password
                 print('################ Set Password ################')
@@ -421,16 +495,7 @@ def main():
                     except:
                         pass
                 time.sleep(WAIT*2)
-                print('################ Check Username Validation ################')
-                try:
-                    WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['username_warning'])))
-                    user_name_manual = ""
-                    print("Invalid")
-                    username_try = username_try + 1
-                    continue
-                except:
-                    print("Valid")
-                    pass
+
                 print('################ Check Phone Verification ################')
                 without_verification = False
                 try:
@@ -523,24 +588,24 @@ def main():
             print('################ Clear Account Phone Number ################')
             # WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_phone_number']))).clear()
 
-            print('################ Account Birthday ################')
-            # Date   
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_day']))).send_keys(birthday.split('/')[1])
+            # print('################ Account Birthday ################')
+            # # Date   
+            # WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_day']))).send_keys(birthday.split('/')[1])
             
-            # Month
-            select_acc_month = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_month'])))
+            # # Month
+            # select_acc_month = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_month'])))
 
-            acc_month = Select(select_acc_month)
-            acc_month.select_by_value(birthday.split('/')[0])
+            # acc_month = Select(select_acc_month)
+            # acc_month.select_by_value(birthday.split('/')[0])
 
-            # Year
-            WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_year']))).send_keys(birthday.split('/')[2])
+            # # Year
+            # WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_year']))).send_keys(birthday.split('/')[2])
 
-            select_acc_gender = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_gender'])))
+            # select_acc_gender = WebDriverWait(driver, WAIT).until(EC.presence_of_element_located((By.XPATH, SELECTORS['acc_gender'])))
 
-            # Gender
-            acc_gender = Select(select_acc_gender)
-            acc_gender.select_by_value('1')
+            # # Gender
+            # acc_gender = Select(select_acc_gender)
+            # acc_gender.select_by_value('1')
 
             print('################ Click "Next" Buton ################')
             for selector in SELECTORS['next']:

@@ -3,7 +3,8 @@
 ## Summary
 Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2023
 
-<a class="github-fork-ribbon right-top" href="https://github.com/leostech/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a> <img align="left" src="https://visitor-badge.laobi.icu/badge?page_id=leostech.leostech" />
+This is the automation script for Python lovers to learn basics about automation as well as commercial for marketers.
+<a class="github-fork-ribbon right-top" href="https://github.com/ai-to-ai/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a> <img align="left" src="https://visitor-badge.laobi.icu/badge?page_id=ai-to-ai.ai-to-ai" />
 
 According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desription ,only about five gmail addresses can be verified on a single phone number.
 
@@ -20,6 +21,7 @@ Also, Feel free to contact me if you have any project regarding Automation, Scra
 2. ```pip install -r requirements.txt``` 
 3. ```python app.py```
 4. 'Created.txt' will be generated for successful creation.
+5. if you already installed python packages for my previous script, I recommend to upgrade the ```webdriver-manager``` package by ```pip install webdriver-manager -U```
 
 ## Customize
 ### Browser [ Chrome, Firefox ]
@@ -88,7 +90,7 @@ To bypass bot-detection, I am all ears to hear from you.
 
 ## Email
 
-leoshabit@gmail.com
+tr.soft.engineer@gmail.com
 
 ## Telegram
 
@@ -96,7 +98,7 @@ https://t.me/leoshabit
 
 ## Discord
 
-leoshabit#0825
+leoshabit
 
 ## Skype
 
@@ -105,9 +107,9 @@ https://join.skype.com/invite/H6S0RFA69GNK
 
 ## Github
 
-https://github.com/leoshabit
+https://github.com/ai-to-ai
 
 ## Phone
 
-+12292995932
++13035365033
 
