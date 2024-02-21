@@ -3,6 +3,13 @@
 ## Summary
 Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2023
 
+### Important Notice for already cloned/ forked users
+
+I developed stealth webdriver that avoid detection during the account creation. You can contact me to get it by giving me a coffee. btw, The only thing remain is to find cheap, robust sms providers as well as proxies.
+
+
+### Introduction
+
 This is the automation script for Python lovers to learn basics about automation as well as commercial for marketers.
 <a class="github-fork-ribbon right-top" href="https://github.com/ai-to-ai/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a> <img align="left" src="https://visitor-badge.laobi.icu/badge?page_id=ai-to-ai.ai-to-ai" />
 
