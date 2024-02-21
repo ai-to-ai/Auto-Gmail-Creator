@@ -1,7 +1,9 @@
 # Auto-Gmail-Creator
 
 ## Summary
-Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2023
+Latest Open Source Bulk Auto Google Account ( Gmail ) Regiteration Bot Script 2024
+### Important Announcement for already cloned/forked users
+I developed stealth webdriver so now it is not recognized during the account creation, only thing remain is to find cheap, robust sms providers as well as proxies
 
 This is the automation script for Python lovers to learn basics about automation as well as commercial for marketers.
 <a class="github-fork-ribbon right-top" href="https://github.com/ai-to-ai/Auto-Gmail-Creator/fork" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a> <img align="left" src="https://visitor-badge.laobi.icu/badge?page_id=ai-to-ai.ai-to-ai" />
@@ -11,6 +13,7 @@ According to [Jonathan](https://www.quora.com/profile/Jonathan-Elder)'s desripti
 This script uses [sms-activate.org](https://sms-activate.org) api for phone verification and more services will be added.
 
 To run the script, you don't need to download Chromedriver or Geckodriver manually. The script does it automatically with webdriver manager.
+
 
 You can customize this script to avoid getting blocked. I am also developing another script with Requests but going to keep it private since it will be blocked if I let it public.
 
